@@ -189,7 +189,7 @@ def update_metrics(raw_metrics, input_mu, input_sigma, sample_mu, labels, predic
     raw_metrics['RMSE'] = raw_metrics['RMSE'] + net.accuracy_RMSE(sample_mu, labels[:, predict_start:], relative=relative)
     input_time_steps = input_mu.numel()
     raw_metrics['test_loss'] = raw_metrics['test_loss'] + [
-        net.loss_fn(input_mu, input_sigma, labels[:, :predict_start]) * input_time_steps, input_time_steps]
+        net.loss_fn(input_mu.cpu(), input_sigma.cpu(), labels[:, :predict_start].cpu()).item() * input_time_steps, input_time_steps]
     if samples is not None:
         raw_metrics['rou90'] = raw_metrics['rou90'] + net.accuracy_ROU(0.9, samples, labels[:, predict_start:], relative=relative)
         raw_metrics['rou50'] = raw_metrics['rou50'] + net.accuracy_ROU(0.5, samples, labels[:, predict_start:], relative=relative)
