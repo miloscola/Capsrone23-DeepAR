@@ -108,8 +108,8 @@ class Net(nn.Module):
             #loss += loss_fn(mu, sigma, labels_batch[t]) #how do I deal with the loss?
             
             if t == 0 or t == 10:
-                print("\n", mu.shape)
-                print("\n", sigma.shape)
+                print("\nmu ", mu.shape)
+                print("\nsigma ", sigma.shape)
                 print("\n_________________________")
         
         return torch.squeeze(mu), torch.squeeze(sigma), hidden, cell

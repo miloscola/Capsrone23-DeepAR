@@ -68,18 +68,18 @@ def evaluate(model, loss_fn, test_loader, params, plot_num, sample=True):
             cell = model.init_cell(batch_size)
 
             # Iterate over time steps in the test_predict_start period
-            for t in range(params.test_predict_start):
+            """for t in range(params.test_predict_start):
                 # If z_t is missing, replace it by output mu from the last time step
                 zero_index = (test_batch[t, :, 0] == 0)
                 if t > 0 and torch.sum(zero_index) > 0:
-                    test_batch[t, zero_index, 0] = mu[zero_index]
+                    test_batch[t, zero_index, 0] = mu[zero_index]"""
 
-                # Model inference for the current time step
-                mu, sigma, hidden, cell = model(test_batch.unsqueeze(0), id_batch, hidden, cell)
+            # Model inference for the current time step
+            mu, sigma, hidden, cell = model(test_batch.unsqueeze(0), id_batch, hidden, cell)
 
-                # Update input_mu and input_sigma
-                input_mu[:, t] = v_batch[:, 0] * mu + v_batch[:, 1]
-                input_sigma[:, t] = v_batch[:, 0] * sigma
+            # Update input_mu and input_sigma
+            input_mu[:, t] = v_batch[:, 0] * mu + v_batch[:, 1]
+            input_sigma[:, t] = v_batch[:, 0] * sigma
 
             # If sampling is enabled, perform ancestral sampling
             if sample:

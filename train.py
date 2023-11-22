@@ -84,9 +84,13 @@ def train(model: nn.Module,
             # Compute the loss for the curent batch
             loss += loss_fn(mu, sigma, labels_batch[t])""" #how do we handle loss?
             
+        print("\nbatch shape BEFORE model", train_batch.shape)    
+            
         #Perform model inference
         mu, sigma, hidden, cell = model(train_batch.unsqueeze_(0).clone(), idx, hidden, cell)
         loss += loss_fn(mu, sigma, labels_batch[params.train_window - 1]) 
+
+        print("\nbatch shape AFTER model", train_batch.shape)
 
         #this code just calculates the loss for the last time step. Should we intagrate
         #the loss function into the forward function?
