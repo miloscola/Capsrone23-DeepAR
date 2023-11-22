@@ -67,9 +67,9 @@ class Net(nn.Module):
         for t in range(self.params.train_window):
             
             if t == 0 or t == 10:
-                print("\n", train_batch.shape)
-                print("\n", train_batch[:, t, :, :].shape)
-                print("\n", self.params.train_window)
+                print("\ntrain_batch ", train_batch.shape)
+                print("\nLSTM input ", train_batch[:, t, :, :].shape)
+                print("\ntrain window ", self.params.train_window)
             
             # if z_t is missing, replace it by output mu from the last time step
             zero_index = (train_batch[0, t, :, 0] == 0)
@@ -83,7 +83,7 @@ class Net(nn.Module):
             # How? Doesn't the embedding change every time step? Do we do the embeddings for all the time steps all at once?
            
             if t == 0 or t == 10:
-                print("\n", onehot_embed.shape)
+                print("\nonehot_embed ", onehot_embed.shape)
                 
             
             #Concatenate x (z_{t-1} + x_t) with the one-hot embedding
