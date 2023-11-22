@@ -55,30 +55,48 @@ def train(model: nn.Module,
     # train_batch ([batch_size, train_window, 1+cov_dim]): z_{0:T-1} + x_{1:T}, note that z_0 = 0;
     # idx ([batch_size]): one integer denoting the time series id;
     # labels_batch ([batch_size, train_window]): z_{1:T}.
+    
+    # Iterate over batches in the training data
     for i, (train_batch, idx, labels_batch) in enumerate(tqdm(train_loader)):
         optimizer.zero_grad()
         batch_size = train_batch.shape[0]
-
+        
+        # Permute dimensions and move to device
         train_batch = train_batch.permute(1, 0, 2).to(torch.float32).to(params.device)  # not scaled
         labels_batch = labels_batch.permute(1, 0).to(torch.float32).to(params.device)  # not scaled
         idx = idx.unsqueeze(0).to(params.device)
-
+        
+        #initialize variables
         loss = torch.zeros(1, device=params.device)
         hidden = model.init_hidden(batch_size)
         cell = model.init_cell(batch_size)
 
+        """#iterate over timesteps in training window
         for t in range(params.train_window):
             # if z_t is missing, replace it by output mu from the last time step
             zero_index = (train_batch[t, :, 0] == 0)
+            
             if t > 0 and torch.sum(zero_index) > 0:
+                # Replace missing values with the output mu from the last time step
                 train_batch[t, zero_index, 0] = mu[zero_index]
+            # Perform model inference for the current time step
             mu, sigma, hidden, cell = model(train_batch[t].unsqueeze_(0).clone(), idx, hidden, cell)
-            loss += loss_fn(mu, sigma, labels_batch[t])
+            # Compute the loss for the curent batch
+            loss += loss_fn(mu, sigma, labels_batch[t])""" #how do we handle loss?
+            
+        #Perform model inference
+        mu, sigma, hidden, cell = model(train_batch.unsqueeze_(0).clone(), idx, hidden, cell)
+        loss += loss_fn(mu, sigma, labels_batch[params.train_window - 1]) 
 
+        #this code just calculates the loss for the last time step. Should we intagrate
+        #the loss function into the forward function?
+        
         loss.backward()
         optimizer.step()
-        loss = loss.item() / params.train_window  # loss per timestep
+        #loss = loss.item() / params.train_window  # loss per timestep
         loss_epoch[i] = loss
+        
+        # Evaluate on test set every 1000 batches
         if i % 1000 == 0:
             test_metrics = evaluate(model, loss_fn, test_loader, params, epoch, sample=args.sampling)
             model.train()
