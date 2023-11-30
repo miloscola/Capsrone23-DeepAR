@@ -1,14 +1,20 @@
 #test
+#test2
 import argparse
 import logging
 import os
 
+# %% 
+#!pip3 install pandas scipy torch tqdm matplotlib numpy
+
+# %%
 import numpy as np
 import torch
 from torch import nn
 import torch.optim as optim
 from torch.utils.data.sampler import RandomSampler
 from tqdm import tqdm
+# %%
 
 import utils
 import model.net as net
@@ -223,3 +229,5 @@ if __name__ == '__main__':
                        loss_fn,
                        params,
                        args.restore_file)
+
+# %%
