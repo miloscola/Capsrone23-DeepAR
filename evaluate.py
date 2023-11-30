@@ -63,11 +63,11 @@ def evaluate(model, loss_fn, test_loader, params, plot_num, sample=True):
           hidden = model.init_hidden(batch_size)
           cell = model.init_cell(batch_size)
           
-          print('test_batch:', test_batch.shape)
-          print('v_batch:', v_batch.shape)
-          print('labels:', labels.shape)
+        #   print('test_batch:', test_batch.shape)
+        #   print('v_batch:', v_batch.shape)
+        #   print('labels:', labels.shape)
 
-          loss, _ = model(test_batch, id_batch, params, labels)
+          loss, _, mu, sigma = model(test_batch, id_batch, params, labels)
 
           for t in range(params.test_predict_start):
             #   # if z_t is missing, replace it by output mu from the last time step
@@ -76,43 +76,43 @@ def evaluate(model, loss_fn, test_loader, params, plot_num, sample=True):
             #       test_batch[t,zero_index,0] = mu[zero_index]
 
             #   mu, sigma, hidden, cell = model(test_batch[t].unsqueeze(0), id_batch, hidden, cell)
-              input_mu[:,t] = v_batch[:, 0] * mu + v_batch[:, 1]
-              input_sigma[:,t] = v_batch[:, 0] * sigma
+            input_mu[:,t] = v_batch[:, 0] * mu[t] + v_batch[:, 1]
+            input_sigma[:,t] = v_batch[:, 0] * sigma[t]
 
           if sample:
-              samples, sample_mu, sample_sigma = model.test(test_batch, v_batch, id_batch, hidden, cell, sampling=True)
-              raw_metrics = utils.update_metrics(raw_metrics, input_mu, input_sigma, sample_mu, labels, params.test_predict_start, samples, relative = params.relative_metrics)
+            samples, sample_mu, sample_sigma = model.test(test_batch, v_batch, id_batch, hidden, cell, sampling=True)
+            raw_metrics = utils.update_metrics(raw_metrics, input_mu, input_sigma, sample_mu, labels, params.test_predict_start, samples, relative = params.relative_metrics)
           else:
-              sample_mu, sample_sigma = model.test(test_batch, v_batch, id_batch, hidden, cell)
-              raw_metrics = utils.update_metrics(raw_metrics, input_mu, input_sigma, sample_mu, labels, params.test_predict_start, relative = params.relative_metrics)
+            sample_mu, sample_sigma = model.test(test_batch, v_batch, id_batch, hidden, cell)
+            raw_metrics = utils.update_metrics(raw_metrics, input_mu, input_sigma, sample_mu, labels, params.test_predict_start, relative = params.relative_metrics)
 
           if i == plot_batch:
-              if sample:
-                  sample_metrics = utils.get_metrics(sample_mu, labels, params.test_predict_start, samples, relative = params.relative_metrics)
-              else:
-                  sample_metrics = utils.get_metrics(sample_mu, labels, params.test_predict_start, relative = params.relative_metrics)                
-              # select 10 from samples with highest error and 10 from the rest
-              top_10_nd_sample = (-sample_metrics['ND']).argsort()[:batch_size // 10]  # hard coded to be 10
-              chosen = set(top_10_nd_sample.tolist())
-              all_samples = set(range(batch_size))
-              not_chosen = np.asarray(list(all_samples - chosen))
-              if batch_size < 100: # make sure there are enough unique samples to choose top 10 from
-                  random_sample_10 = np.random.choice(top_10_nd_sample, size=10, replace=True)
-              else:
-                  random_sample_10 = np.random.choice(top_10_nd_sample, size=10, replace=False)
-              if batch_size < 12: # make sure there are enough unique samples to choose bottom 90 from
-                  random_sample_90 = np.random.choice(not_chosen, size=10, replace=True)
-              else:
-                  random_sample_90 = np.random.choice(not_chosen, size=10, replace=False)
-              combined_sample = np.concatenate((random_sample_10, random_sample_90))
+            if sample:
+                sample_metrics = utils.get_metrics(sample_mu, labels, params.test_predict_start, samples, relative = params.relative_metrics)
+            else:
+                sample_metrics = utils.get_metrics(sample_mu, labels, params.test_predict_start, relative = params.relative_metrics)                
+            # select 10 from samples with highest error and 10 from the rest
+            top_10_nd_sample = (-sample_metrics['ND']).argsort()[:batch_size // 10]  # hard coded to be 10
+            chosen = set(top_10_nd_sample.tolist())
+            all_samples = set(range(batch_size))
+            not_chosen = np.asarray(list(all_samples - chosen))
+            if batch_size < 100: # make sure there are enough unique samples to choose top 10 from
+                random_sample_10 = np.random.choice(top_10_nd_sample, size=10, replace=True)
+            else:
+                random_sample_10 = np.random.choice(top_10_nd_sample, size=10, replace=False)
+            if batch_size < 12: # make sure there are enough unique samples to choose bottom 90 from
+                random_sample_90 = np.random.choice(not_chosen, size=10, replace=True)
+            else:
+                random_sample_90 = np.random.choice(not_chosen, size=10, replace=False)
+            combined_sample = np.concatenate((random_sample_10, random_sample_90))
 
-              label_plot = labels[combined_sample].data.cpu().numpy()
-              predict_mu = sample_mu[combined_sample].data.cpu().numpy()
-              predict_sigma = sample_sigma[combined_sample].data.cpu().numpy()
-              plot_mu = np.concatenate((input_mu[combined_sample].data.cpu().numpy(), predict_mu), axis=1)
-              plot_sigma = np.concatenate((input_sigma[combined_sample].data.cpu().numpy(), predict_sigma), axis=1)
-              plot_metrics = {_k: _v[combined_sample] for _k, _v in sample_metrics.items()}
-              plot_eight_windows(params.plot_dir, plot_mu, plot_sigma, label_plot, params.test_window, params.test_predict_start, plot_num, plot_metrics, sample)
+            label_plot = labels[combined_sample].data.cpu().numpy()
+            predict_mu = sample_mu[combined_sample].data.cpu().numpy()
+            predict_sigma = sample_sigma[combined_sample].data.cpu().numpy()
+            plot_mu = np.concatenate((input_mu[combined_sample].data.cpu().numpy(), predict_mu), axis=1)
+            plot_sigma = np.concatenate((input_sigma[combined_sample].data.cpu().numpy(), predict_sigma), axis=1)
+            plot_metrics = {_k: _v[combined_sample] for _k, _v in sample_metrics.items()}
+            plot_eight_windows(params.plot_dir, plot_mu, plot_sigma, label_plot, params.test_window, params.test_predict_start, plot_num, plot_metrics, sample)
 
       summary_metric = utils.final_metrics(raw_metrics, sampling=sample)
       metrics_string = '; '.join('{}: {:05.3f}'.format(k, v) for k, v in summary_metric.items())
