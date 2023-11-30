@@ -45,7 +45,7 @@ class Net(nn.Module):
         self.distribution_presigma = nn.Linear(params.lstm_hidden_dim * params.lstm_layers, 1)
         self.distribution_sigma = nn.Softplus()
 
-    def forward(self, x, idx, hidden, cell):
+    def forward(self, x, idx, params, labels):
         '''
         Predict mu and sigma of the distribution for z_t.
         Args:
@@ -59,15 +59,124 @@ class Net(nn.Module):
             hidden ([lstm_layers, batch_size, lstm_hidden_dim]): LSTM h from time step t
             cell ([lstm_layers, batch_size, lstm_hidden_dim]): LSTM c from time step t
         '''
+        batch_size = x.shape[1]
+        loss = torch.zeros(1, device=params.device)
+        predictions = torch.zeros(x.shape[0], batch_size, 1, device=params.device)
+        # Initialize
+        hidden = self.init_hidden(batch_size)
+        cell = self.init_cell(batch_size) 
+
+        # Compute once per window
         onehot_embed = self.embedding(idx) #TODO: is it possible to do this only once per window instead of per step?
-        lstm_input = torch.cat((x, onehot_embed), dim=2)
-        output, (hidden, cell) = self.lstm(lstm_input, (hidden, cell))
-        # use h from all three layers to calculate mu and sigma
-        hidden_permute = hidden.permute(1, 2, 0).contiguous().view(hidden.shape[1], -1)
-        pre_sigma = self.distribution_presigma(hidden_permute)
-        mu = self.distribution_mu(hidden_permute)
-        sigma = self.distribution_sigma(pre_sigma)  # softplus to make sure standard deviation is positive
-        return torch.squeeze(mu), torch.squeeze(sigma), hidden, cell
+        for t in range(params.train_window):
+            
+            # zero_index = (x[t, :, 0] == 0)
+            # if t > 0 and torch.sum(zero_index) > 0:
+            #     x[t, zero_index, 0] = mu[zero_index]
+
+            if(t == 0):
+                print('x[t] shape', x[t].shape)
+                print('onehot_embed shape', onehot_embed.shape)
+            
+            lstm_input = torch.cat((x[t].unsqueeze_(0).clone(), onehot_embed), dim=2)
+            output, (hidden, cell) = self.lstm(lstm_input, (hidden, cell))
+            # use h from all three layers to calculate mu and sigma
+            hidden_permute = hidden.permute(1, 2, 0).contiguous().view(hidden.shape[1], -1)
+            pre_sigma = self.distribution_presigma(hidden_permute)
+            mu = self.distribution_mu(hidden_permute)
+            sigma = self.distribution_sigma(pre_sigma)  # softplus to make sure standard deviation is positive
+
+            loss += loss_fn(mu, sigma, labels[t])
+        
+        print("train_shape:",x.shape)
+
+        return loss / params.train_window, predictions
+
+    # def forward(self, x, idx, params, labels, additional_steps = 0):
+    #     '''
+    #     Predict mu and sigma of the distribution for z_t.
+    #     Args:
+    #         x: ([1, batch_size, 1+cov_dim]): z_{t-1} + x_t, note that z_0 = 0
+    #         idx ([1, batch_size]): one integer denoting the time series id
+    #         hidden ([lstm_layers, batch_size, lstm_hidden_dim]): LSTM h from time step t-1
+    #         cell ([lstm_layers, batch_size, lstm_hidden_dim]): LSTM c from time step t-1
+    #     Returns:
+    #         mu ([batch_size]): estimated mean of z_t
+    #         sigma ([batch_size]): estimated standard deviation of z_t
+    #         hidden ([lstm_layers, batch_size, lstm_hidden_dim]): LSTM h from time step t
+    #         cell ([lstm_layers, batch_size, lstm_hidden_dim]): LSTM c from time step t
+    #     '''
+    #     batch_size = x.shape[2]
+    #     loss = torch.zeros(1, device=params.device)
+    #     predictions = torch.zeros(x.shape[1] + additional_steps, batch_size, 1, device=params.device)
+    #     # Initialize
+    #     hidden = self.init_hidden(batch_size)
+    #     cell = self.init_cell(batch_size) 
+
+    #     # Compute once per window
+    #     onehot_embed = self.embedding(idx) #TODO: is it possible to do this only once per window instead of per step?
+    #     print(onehot_embed.shape)
+    #     print(x.shape)
+    #     print(params.train_window)
+    #     for t in range(params.train_window + additional_steps):
+    #         print(t)
+    #         lstm_input = torch.cat((x[:,t,:,:], onehot_embed), dim=2)
+    #         zero_index = (x[:,t, :, 0] == 0)
+            
+    #         if t > 0 and torch.sum(zero_index) > 0:
+    #             x[:, t, zero_index, 0] = mu[zero_index]
+
+    #         output, (hidden, cell) = self.lstm(lstm_input, (hidden, cell))
+    #         # use h from all three layers to calculate mu and sigma
+    #         hidden_permute = hidden.permute(1, 2, 0).contiguous().view(hidden.shape[1], -1)
+    #         pre_sigma = self.distribution_presigma(hidden_permute)
+    #         mu = self.distribution_mu(hidden_permute)
+    #         sigma = self.distribution_sigma(pre_sigma)  # softplus to make sure standard deviation is positive
+
+    #         predictions[t] = mu
+
+    #         if t < params.train_window:
+    #             loss += loss_fn(mu, sigma, labels[t])
+    #             print(loss)
+
+    #         if t < params.train_window - 1:
+    #             x[:, t + 1, : , 0] = torch.transpose(mu,0,1).detach()
+            
+    #         # if t >= params.train_window and t < (params.train_window + additional_steps - 1):
+    #         #     # mu_pred = torch.unsqueeze(torch.transpose(mu,0,1), dim=0)
+    #         #     mu_pred = torch.transpose(mu,0,1)
+    #         #     print(mu_pred.shape)
+    #         #     print(x.shape)
+    #         #     x[:, t , : , 0] = torch.cat(x[:, t, : , 0], mu_pred, dim=2)
+                
+
+    #     return loss,predictions
+
+
+    # def forward(self, x, idx, hidden, cell):
+    #     '''
+    #     Predict mu and sigma of the distribution for z_t.
+    #     Args:
+    #         x: ([1, batch_size, 1+cov_dim]): z_{t-1} + x_t, note that z_0 = 0
+    #         idx ([1, batch_size]): one integer denoting the time series id
+    #         hidden ([lstm_layers, batch_size, lstm_hidden_dim]): LSTM h from time step t-1
+    #         cell ([lstm_layers, batch_size, lstm_hidden_dim]): LSTM c from time step t-1
+    #     Returns:
+    #         mu ([batch_size]): estimated mean of z_t
+    #         sigma ([batch_size]): estimated standard deviation of z_t
+    #         hidden ([lstm_layers, batch_size, lstm_hidden_dim]): LSTM h from time step t
+    #         cell ([lstm_layers, batch_size, lstm_hidden_dim]): LSTM c from time step t
+    #     '''
+    #     onehot_embed = self.embedding(idx) #TODO: is it possible to do this only once per window instead of per step?
+        
+    #     lstm_input = torch.cat((x, onehot_embed), dim=2)
+    #     output, (hidden, cell) = self.lstm(lstm_input, (hidden, cell))
+    #     # use h from all three layers to calculate mu and sigma
+    #     hidden_permute = hidden.permute(1, 2, 0).contiguous().view(hidden.shape[1], -1)
+    #     pre_sigma = self.distribution_presigma(hidden_permute)
+    #     mu = self.distribution_mu(hidden_permute)
+    #     sigma = self.distribution_sigma(pre_sigma)  # softplus to make sure standard deviation is positive
+    #     return torch.squeeze(mu), torch.squeeze(sigma), hidden, cell
 
     def init_hidden(self, input_size):
         return torch.zeros(self.params.lstm_layers, input_size, self.params.lstm_hidden_dim, device=self.params.device)

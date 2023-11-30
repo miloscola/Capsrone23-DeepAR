@@ -1,4 +1,4 @@
-#ioioioisss
+# ijijijijijij
 import argparse
 import logging
 import os
@@ -56,30 +56,20 @@ def train(model: nn.Module,
     # train_batch ([batch_size, train_window, 1+cov_dim]): z_{0:T-1} + x_{1:T}, note that z_0 = 0;
     # idx ([batch_size]): one integer denoting the time series id;
     # labels_batch ([batch_size, train_window]): z_{1:T}.
+    
     for i, (train_batch, idx, labels_batch) in enumerate(tqdm(train_loader)):
         optimizer.zero_grad()
-        batch_size = train_batch.shape[0]
 
         train_batch = train_batch.permute(1, 0, 2).to(torch.float32).to(params.device)  # not scaled
         labels_batch = labels_batch.permute(1, 0).to(torch.float32).to(params.device)  # not scaled
         idx = idx.unsqueeze(0).to(params.device)
-
-        loss = torch.zeros(1, device=params.device)
-        hidden = model.init_hidden(batch_size)
-        cell = model.init_cell(batch_size)
-
-        for t in range(params.train_window):
-            # if z_t is missing, replace it by output mu from the last time step
-            zero_index = (train_batch[t, :, 0] == 0)
-            if t > 0 and torch.sum(zero_index) > 0:
-                train_batch[t, zero_index, 0] = mu[zero_index]
-            mu, sigma, hidden, cell = model(train_batch[t].unsqueeze_(0).clone(), idx, hidden, cell)
-            loss += loss_fn(mu, sigma, labels_batch[t])
-
+        print('train_batch:', train_batch.shape)
+        print('train labels_batch:', labels_batch.shape)
+        loss, _ = model(train_batch, idx, params, labels_batch)
         loss.backward()
         optimizer.step()
-        loss = loss.item() / params.train_window  # loss per timestep
-        loss_epoch[i] = loss
+        loss_epoch[i] = loss.item()
+
         if i % 1000 == 0:
             test_metrics = evaluate(model, loss_fn, test_loader, params, epoch, sample=args.sampling)
             model.train()
@@ -87,6 +77,62 @@ def train(model: nn.Module,
         if i == 0:
             logger.info(f'train_loss: {loss}')
     return loss_epoch
+
+
+# def train(model: nn.Module,
+#           optimizer: optim,
+#           loss_fn,
+#           train_loader: DataLoader,
+#           test_loader: DataLoader,
+#           params: utils.Params,
+#           epoch: int) -> float:
+#     '''Train the model on one epoch by batches.
+#     Args:
+#         model: (torch.nn.Module) the neural network
+#         optimizer: (torch.optim) optimizer for parameters of model
+#         loss_fn: a function that takes outputs and labels per timestep, and then computes the loss for the batch
+#         train_loader: load train data and labels
+#         test_loader: load test data and labels
+#         params: (Params) hyperparameters
+#         epoch: (int) the current training epoch
+#     '''
+#     model.train()
+#     loss_epoch = np.zeros(len(train_loader))
+#     # Train_loader:
+#     # train_batch ([batch_size, train_window, 1+cov_dim]): z_{0:T-1} + x_{1:T}, note that z_0 = 0;
+#     # idx ([batch_size]): one integer denoting the time series id;
+#     # labels_batch ([batch_size, train_window]): z_{1:T}.
+#     for i, (train_batch, idx, labels_batch) in enumerate(tqdm(train_loader)):
+#         optimizer.zero_grad()
+#         batch_size = train_batch.shape[0]
+
+#         train_batch = train_batch.permute(1, 0, 2).to(torch.float32).to(params.device)  # not scaled
+#         labels_batch = labels_batch.permute(1, 0).to(torch.float32).to(params.device)  # not scaled
+#         idx = idx.unsqueeze(0).to(params.device)
+
+#         loss = torch.zeros(1, device=params.device)
+#         hidden = model.init_hidden(batch_size)
+#         cell = model.init_cell(batch_size)
+
+#         for t in range(params.train_window):
+#             # if z_t is missing, replace it by output mu from the last time step
+#             zero_index = (train_batch[t, :, 0] == 0)
+#             if t > 0 and torch.sum(zero_index) > 0:
+#                 train_batch[t, zero_index, 0] = mu[zero_index]
+#             mu, sigma, hidden, cell = model(train_batch[t].unsqueeze_(0).clone(), idx, hidden, cell)
+#             loss += loss_fn(mu, sigma, labels_batch[t])
+
+#         loss.backward()
+#         optimizer.step()
+#         loss = loss.item() / params.train_window  # loss per timestep
+#         loss_epoch[i] = loss
+#         if i % 1000 == 0:
+#             test_metrics = evaluate(model, loss_fn, test_loader, params, epoch, sample=args.sampling)
+#             model.train()
+#             logger.info(f'train_loss: {loss}')
+#         if i == 0:
+#             logger.info(f'train_loss: {loss}')
+#     return loss_epoch
 
 
 def train_and_evaluate(model: nn.Module,
@@ -213,6 +259,26 @@ if __name__ == '__main__':
 
     # fetch loss function
     loss_fn = net.loss_fn
+    # print(params.dict)
+    # print(train_loader.dataset)
+    '''
+    'learning_rate': 0.001, 
+    'batch_size': 64, 'lstm_layers': 3, 
+    'num_epochs': 20, 'train_window': 192, 
+    'test_window': 192, 'predict_start': 168, 
+    'test_predict_start': 168, 
+    'predict_steps': 24, 'num_class': 370, 
+    'cov_dim': 4, 'lstm_hidden_dim': 40, 
+    'embedding_dim': 20, 
+    'sample_times': 200, 
+    'lstm_dropout': 0.1, 
+    'predict_batch': 256, 
+    'relative_metrics': False, 
+    'sampling': False, 
+    'model_dir': 'experiments/base_model', 
+    'plot_dir': 'experiments/base_model/figures', 
+    'device': device(type='cpu')
+    '''
 
     # Train the model
     logger.info('Starting training for {} epoch(s)'.format(params.num_epochs))

@@ -55,19 +55,27 @@ def evaluate(model, loss_fn, test_loader, params, plot_num, sample=True):
           id_batch = id_batch.unsqueeze(0).to(params.device)
           v_batch = v.to(torch.float32).to(params.device)
           labels = labels.to(torch.float32).to(params.device)
+          labels = labels.permute(1, 0).to(torch.float32).to(params.device)  # not scaled
           batch_size = test_batch.shape[1]
           input_mu = torch.zeros(batch_size, params.test_predict_start, device=params.device) # scaled
           input_sigma = torch.zeros(batch_size, params.test_predict_start, device=params.device) # scaled
+        #   id_batch = id_batch.unsqueeze(0).to(params.device)
           hidden = model.init_hidden(batch_size)
           cell = model.init_cell(batch_size)
+          
+          print('test_batch:', test_batch.shape)
+          print('v_batch:', v_batch.shape)
+          print('labels:', labels.shape)
+
+          loss, _ = model(test_batch, id_batch, params, labels)
 
           for t in range(params.test_predict_start):
-              # if z_t is missing, replace it by output mu from the last time step
-              zero_index = (test_batch[t,:,0] == 0)
-              if t > 0 and torch.sum(zero_index) > 0:
-                  test_batch[t,zero_index,0] = mu[zero_index]
+            #   # if z_t is missing, replace it by output mu from the last time step
+            #   zero_index = (test_batch[t,:,0] == 0)
+            #   if t > 0 and torch.sum(zero_index) > 0:
+            #       test_batch[t,zero_index,0] = mu[zero_index]
 
-              mu, sigma, hidden, cell = model(test_batch[t].unsqueeze(0), id_batch, hidden, cell)
+            #   mu, sigma, hidden, cell = model(test_batch[t].unsqueeze(0), id_batch, hidden, cell)
               input_mu[:,t] = v_batch[:, 0] * mu + v_batch[:, 1]
               input_sigma[:,t] = v_batch[:, 0] * sigma
 
