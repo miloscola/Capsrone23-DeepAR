@@ -87,8 +87,8 @@ def train(model: nn.Module,
         print("\nbatch shape BEFORE model", train_batch.shape)    
             
         #Perform model inference
-        mu, sigma, hidden, cell = model(train_batch.unsqueeze_(0).clone(), idx, hidden, cell)
-        loss += loss_fn(mu, sigma, labels_batch[params.train_window - 1]) 
+        mu, sigma, hidden, cell, loss = model(train_batch.clone(), idx, hidden, cell, labels_batch) # can remove unsqueeze
+        #loss += loss_fn(mu, sigma, labels_batch[params.train_window - 1]) #move into forward function
 
         print("\nbatch shape AFTER model", train_batch.shape)
 
@@ -97,7 +97,7 @@ def train(model: nn.Module,
         
         loss.backward()
         optimizer.step()
-        #loss = loss.item() / params.train_window  # loss per timestep
+        loss = loss.item() / params.train_window  # loss per timestep
         loss_epoch[i] = loss
         
         # Evaluate on test set every 1000 batches

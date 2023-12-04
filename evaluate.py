@@ -75,20 +75,20 @@ def evaluate(model, loss_fn, test_loader, params, plot_num, sample=True):
                     test_batch[t, zero_index, 0] = mu[zero_index]"""
 
             # Model inference for the current time step
-            mu, sigma, hidden, cell = model(test_batch.unsqueeze(0), id_batch, hidden, cell)
+            #mu, sigma, hidden, cell = model(test_batch.unsqueeze(0), id_batch, hidden, cell)
 
             # Update input_mu and input_sigma
-            input_mu[:, t] = v_batch[:, 0] * mu + v_batch[:, 1]
-            input_sigma[:, t] = v_batch[:, 0] * sigma
+            #input_mu[:, t] = v_batch[:, 0] * mu + v_batch[:, 1]
+            #input_sigma[:, t] = v_batch[:, 0] * sigma
 
             # If sampling is enabled, perform ancestral sampling
             if sample:
-                samples, sample_mu, sample_sigma = model.test(test_batch, v_batch, id_batch, hidden, cell, sampling=True)
+                samples, sample_mu, sample_sigma, input_mu, input_sigma = model.test(test_batch, v_batch, id_batch, hidden, cell, input_mu, input_sigma, sampling=True)
                 raw_metrics = utils.update_metrics(raw_metrics, input_mu, input_sigma, sample_mu, labels,
                                                    params.test_predict_start, samples, relative=params.relative_metrics)
             else:
                 # Use output mu from the last time step
-                sample_mu, sample_sigma = model.test(test_batch, v_batch, id_batch, hidden, cell)
+                sample_mu, sample_sigma, input_mu, input_sigma = model.test(test_batch, v_batch, id_batch, hidden, cell, input_mu, input_sigma)
                 raw_metrics = utils.update_metrics(raw_metrics, input_mu, input_sigma, sample_mu, labels,
                                                    params.test_predict_start, relative=params.relative_metrics)
 
@@ -132,6 +132,8 @@ def evaluate(model, loss_fn, test_loader, params, plot_num, sample=True):
         metrics_string = '; '.join('{}: {:05.3f}'.format(k, v) for k, v in summary_metric.items())
         logger.info('- Full test metrics: ' + metrics_string)
     return summary_metric
+
+
 
 
 def plot_eight_windows(plot_dir,

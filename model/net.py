@@ -45,7 +45,7 @@ class Net(nn.Module):
         self.distribution_presigma = nn.Linear(params.lstm_hidden_dim * params.lstm_layers, 1)
         self.distribution_sigma = nn.Softplus()
 
-    def forward(self, train_batch, idx, hidden, cell):
+    def forward(self, train_batch, idx, hidden, cell, labels_batch):
         # x is now a training batch instead of a single timestep
         '''
         Predict mu and sigma of the distribution for z_t.
@@ -63,31 +63,98 @@ class Net(nn.Module):
         
         mu = 0 #needed to fix "mu not defined" error in if statement
         
+        #initialize loss
+        loss = torch.zeros(1, device=self.params.device)
+        
+        # Embedding for the time series id
+        onehot_embed = self.embedding(idx) 
+        
         #iterate over timesteps in training window
         for t in range(self.params.train_window):
             
             if t == 0 or t == 10:
                 print("\ntrain_batch ", train_batch.shape)
-                print("\nLSTM input ", train_batch[:, t, :, :].shape)
+                print("\nLSTM input ", train_batch[t, :, :].unsqueeze(0).shape)
                 print("\ntrain window ", self.params.train_window)
             
             # if z_t is missing, replace it by output mu from the last time step
-            zero_index = (train_batch[0, t, :, 0] == 0)
+            zero_index = (train_batch[t, :, 0] == 0)
             
             if t > 0 and torch.sum(zero_index) > 0:
                 # Replace missing values with the output mu from the last time step
-                train_batch[0, t, zero_index, 0] = mu[zero_index]
-           
-            # Embedding for the time series id 
-            onehot_embed = self.embedding(idx) #TODO: is it possible to do this only once per window instead of per step?
-            # How? Doesn't the embedding change every time step? Do we do the embeddings for all the time steps all at once?
-           
+                train_batch[t, zero_index, 0] = mu[zero_index][:, 0]
+            
             if t == 0 or t == 10:
                 print("\nonehot_embed ", onehot_embed.shape)
                 
             
             #Concatenate x (z_{t-1} + x_t) with the one-hot embedding
-            lstm_input = torch.cat((train_batch[:, t, :, :], onehot_embed), dim=2)
+            lstm_input = torch.cat((train_batch[t, :, :].unsqueeze(0), onehot_embed), dim=2)
+           
+            # Pass lstm_input input through the LSTM layer
+            output, (hidden, cell) = self.lstm(lstm_input, (hidden, cell))
+           
+            # use h from all three layers to calculate mu and sigma
+            hidden_permute = hidden.permute(1, 2, 0).contiguous().view(hidden.shape[1], -1)
+           
+            # Predict the pre-sigma values from the LSTM hidden states
+            pre_sigma = self.distribution_presigma(hidden_permute)
+          
+            # Predict the mean (mu) of the distribution from the LSTM hidden states
+            mu = self.distribution_mu(hidden_permute)
+           
+            # Predict the standard deviation (sigma) with a softplus activation
+            sigma = self.distribution_sigma(pre_sigma)  # softplus to make sure standard deviation is positive 
+           
+            # Compute the loss for the current time step and accumulate it
+            loss += loss_fn(mu, sigma, labels_batch[t]) #how do I deal with the loss?
+            
+            if t == 0 or t == 10:
+                print("\nmu ", mu.shape)
+                print("\nsigma ", sigma.shape)
+                print("\n_________________________")
+        
+        return torch.squeeze(mu), torch.squeeze(sigma), hidden, cell, loss
+
+    def init_hidden(self, input_size):
+        return torch.zeros(self.params.lstm_layers, input_size, self.params.lstm_hidden_dim, device=self.params.device)
+
+    def init_cell(self, input_size):
+        return torch.zeros(self.params.lstm_layers, input_size, self.params.lstm_hidden_dim, device=self.params.device)
+
+    def test(self, x, v_batch, id_batch, hidden, cell, input_mu, input_sigma, sampling=False):
+        # Get the batch size from the input tensor x
+        batch_size = x.shape[1]
+    
+#########################################################
+#progress 12/3: fixed loss, created for loop inside test, 
+    
+        mu = 0 #needed to fix "mu not defined" error in if statement
+        
+        # Embedding for the time series id
+        onehot_embed = self.embedding(id_batch) 
+        
+        #iterate over timesteps in training window
+        for t in range(self.params.train_window):    
+            
+            if t == 0 or t == 10:
+                print("\nv_batch ", v_batch.shape)
+                print("\nLSTM input ", v_batch[t, :, :].unsqueeze(0).shape)
+                print("\nv window ", self.params.train_window)
+            
+            # if z_t is missing, replace it by output mu from the last time step
+            zero_index = (v_batch[t, :, 0] == 0)
+            
+            if t > 0 and torch.sum(zero_index) > 0:
+                # Replace missing values with the output mu from the last time step
+                v_batch[t, zero_index, 0] = mu[zero_index][:, 0]
+            
+            if t == 0 or t == 10:
+                print("\nonehot_embed ", onehot_embed.shape)
+                
+            
+            #Concatenate x (z_{t-1} + x_t) with the one-hot embedding
+            lstm_input = torch.cat((v_batch[t, :, :].unsqueeze(0), onehot_embed), dim=2)
            
             # Pass lstm_input input through the LSTM layer
             output, (hidden, cell) = self.lstm(lstm_input, (hidden, cell))
@@ -107,53 +174,84 @@ class Net(nn.Module):
             # Compute the loss for the current time step and accumulate it
             #loss += loss_fn(mu, sigma, labels_batch[t]) #how do I deal with the loss?
             
+            #update input mu and input sigma
+            input_mu[:, t] = v_batch[:, 0] * mu + v_batch[:, 1]
+            input_sigma[:, t] = v_batch[:, 0] * sigma
+            
             if t == 0 or t == 10:
                 print("\nmu ", mu.shape)
                 print("\nsigma ", sigma.shape)
                 print("\n_________________________")
-        
-        return torch.squeeze(mu), torch.squeeze(sigma), hidden, cell
-
-    def init_hidden(self, input_size):
-        return torch.zeros(self.params.lstm_layers, input_size, self.params.lstm_hidden_dim, device=self.params.device)
-
-    def init_cell(self, input_size):
-        return torch.zeros(self.params.lstm_layers, input_size, self.params.lstm_hidden_dim, device=self.params.device)
-
-    def test(self, x, v_batch, id_batch, hidden, cell, sampling=False):
-        batch_size = x.shape[1]
+    
+########################################################################
+    
+        # If sampling is set to True
         if sampling:
+            # Initialize a tensor to store samples with shape (sample_times, batch_size, predict_steps)
             samples = torch.zeros(self.params.sample_times, batch_size, self.params.predict_steps,
-                                       device=self.params.device)
+                                   device=self.params.device)
+            
+            # Iterate over sample times
             for j in range(self.params.sample_times):
+                # Initialize decoder hidden and cell states
                 decoder_hidden = hidden
                 decoder_cell = cell
+                
+                # Iterate over prediction steps
                 for t in range(self.params.predict_steps):
+                    # Call the model to get mean, standard deviation, and updated hidden and cell states
                     mu_de, sigma_de, decoder_hidden, decoder_cell = self(x[self.params.predict_start + t].unsqueeze(0),
                                                                          id_batch, decoder_hidden, decoder_cell)
+                    
+                    # Create a normal distribution with mean and standard deviation
                     gaussian = torch.distributions.normal.Normal(mu_de, sigma_de)
-                    pred = gaussian.sample()  # not scaled
+                    
+                    # Sample from the normal distribution (not scaled)
+                    pred = gaussian.sample()
+                    
+                    # Scale the sample and store it in the samples tensor
                     samples[j, :, t] = pred * v_batch[:, 0] + v_batch[:, 1]
+                    
+                    # Update the input tensor x for the next time step
                     if t < (self.params.predict_steps - 1):
                         x[self.params.predict_start + t + 1, :, 0] = pred
-
+    
+            # Compute the median of the samples along the first dimension
             sample_mu = torch.median(samples, dim=0)[0]
+            
+            # Compute the standard deviation of the samples along the first dimension
             sample_sigma = samples.std(dim=0)
-            return samples, sample_mu, sample_sigma
-
+            
+            # Return the samples, sample mean, and sample standard deviation
+            return samples, sample_mu, sample_sigma, input_mu, input_sigma
+    
+        # If sampling is set to False
         else:
+            # Initialize decoder hidden and cell states
             decoder_hidden = hidden
             decoder_cell = cell
+            
+            # Initialize tensors to store sample mean and sample standard deviation
             sample_mu = torch.zeros(batch_size, self.params.predict_steps, device=self.params.device)
             sample_sigma = torch.zeros(batch_size, self.params.predict_steps, device=self.params.device)
+            
+            # Iterate over prediction steps
             for t in range(self.params.predict_steps):
+                # Call the model to get mean, standard deviation, and updated hidden and cell states
                 mu_de, sigma_de, decoder_hidden, decoder_cell = self(x[self.params.predict_start + t].unsqueeze(0),
                                                                      id_batch, decoder_hidden, decoder_cell)
+                
+                # Scale the mean and standard deviation and store them in the corresponding tensors
                 sample_mu[:, t] = mu_de * v_batch[:, 0] + v_batch[:, 1]
                 sample_sigma[:, t] = sigma_de * v_batch[:, 0]
+                
+                # Update the input tensor x for the next time step
                 if t < (self.params.predict_steps - 1):
                     x[self.params.predict_start + t + 1, :, 0] = mu_de
-            return sample_mu, sample_sigma
+    
+            # Return the sample mean and sample standard deviation
+            return sample_mu, sample_sigma, input_mu, input_sigma
+
 
 
 def loss_fn(mu: Variable, sigma: Variable, labels: Variable):
