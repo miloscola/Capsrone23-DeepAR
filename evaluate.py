@@ -78,6 +78,8 @@ def evaluate(model, loss_fn, test_loader, params, plot_num, sample=True):
             #   mu, sigma, hidden, cell = model(test_batch[t].unsqueeze(0), id_batch, hidden, cell)
             input_mu[:,t] = v_batch[:, 0] * mu[t] + v_batch[:, 1]
             input_sigma[:,t] = v_batch[:, 0] * sigma[t]
+         
+          print('finish for loop in evaluate')
 
           if sample:
             samples, sample_mu, sample_sigma = model.test(test_batch, v_batch, id_batch, hidden, cell, sampling=True)

@@ -63,7 +63,7 @@ def train(model: nn.Module,
         train_batch = train_batch.permute(1, 0, 2).to(torch.float32).to(params.device)  # not scaled
         labels_batch = labels_batch.permute(1, 0).to(torch.float32).to(params.device)  # not scaled
         idx = idx.unsqueeze(0).to(params.device)
-        # print('train_batch:', train_batch.shape)
+        print('train_batch:', train_batch.shape)
         # print('train labels_batch:', labels_batch.shape)
         loss, _, mu, sigma = model(train_batch, idx, params, labels_batch)
         loss.backward()
