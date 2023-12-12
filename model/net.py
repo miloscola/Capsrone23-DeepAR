@@ -45,7 +45,7 @@ class Net(nn.Module):
         self.distribution_presigma = nn.Linear(params.lstm_hidden_dim * params.lstm_layers, 1)
         self.distribution_sigma = nn.Softplus()
 
-    def forward(self, train_batch, idx, hidden, cell, labels_batch):
+    def forward(self, train_batch, idx, hidden, cell, labels_batch, calc_loss=True):
         # x is now a training batch instead of a single timestep
         '''
         Predict mu and sigma of the distribution for z_t.
@@ -69,10 +69,11 @@ class Net(nn.Module):
         # Embedding for the time series id
         onehot_embed = self.embedding(idx) 
         
-        #iterate over timesteps in training window
-        for t in range(self.params.train_window):
+        #iterate over timesteps in training window (min is to fix for loop when used in test function)
+        for t in range(min(self.params.train_window, train_batch.shape[0])):
             
             if t == 0 or t == 10:
+                #print("\nlabels batch ", labels_batch.shape)
                 print("\ntrain_batch ", train_batch.shape)
                 print("\nLSTM input ", train_batch[t, :, :].unsqueeze(0).shape)
                 print("\ntrain window ", self.params.train_window)
@@ -107,7 +108,8 @@ class Net(nn.Module):
             sigma = self.distribution_sigma(pre_sigma)  # softplus to make sure standard deviation is positive 
            
             # Compute the loss for the current time step and accumulate it
-            loss += loss_fn(mu, sigma, labels_batch[t]) #how do I deal with the loss?
+            if calc_loss:
+                loss += loss_fn(mu, sigma, labels_batch[t]) #how do I deal with the loss?
             
             if t == 0 or t == 10:
                 print("\nmu ", mu.shape)
@@ -135,26 +137,26 @@ class Net(nn.Module):
         onehot_embed = self.embedding(id_batch) 
         
         #iterate over timesteps in training window
-        for t in range(self.params.train_window):    
+        for t in range(self.params.test_predict_start):    
             
             if t == 0 or t == 10:
-                print("\nv_batch ", v_batch.shape)
-                print("\nLSTM input ", v_batch[t, :, :].unsqueeze(0).shape)
-                print("\nv window ", self.params.train_window)
+                print("\nx ", x.shape)
+                print("\nLSTM input ", x[t, :, :].unsqueeze(0).shape)
+                print("\nx window ", self.params.train_window)
             
             # if z_t is missing, replace it by output mu from the last time step
-            zero_index = (v_batch[t, :, 0] == 0)
+            zero_index = (x[t, :, 0] == 0)
             
             if t > 0 and torch.sum(zero_index) > 0:
                 # Replace missing values with the output mu from the last time step
-                v_batch[t, zero_index, 0] = mu[zero_index][:, 0]
+                x[t, zero_index, 0] = mu[zero_index][:, 0]
             
             if t == 0 or t == 10:
                 print("\nonehot_embed ", onehot_embed.shape)
                 
             
             #Concatenate x (z_{t-1} + x_t) with the one-hot embedding
-            lstm_input = torch.cat((v_batch[t, :, :].unsqueeze(0), onehot_embed), dim=2)
+            lstm_input = torch.cat((x[t, :, :].unsqueeze(0), onehot_embed), dim=2)
            
             # Pass lstm_input input through the LSTM layer
             output, (hidden, cell) = self.lstm(lstm_input, (hidden, cell))
@@ -170,18 +172,22 @@ class Net(nn.Module):
            
             # Predict the standard deviation (sigma) with a softplus activation
             sigma = self.distribution_sigma(pre_sigma)  # softplus to make sure standard deviation is positive 
-           
-            # Compute the loss for the current time step and accumulate it
-            #loss += loss_fn(mu, sigma, labels_batch[t]) #how do I deal with the loss?
-            
-            #update input mu and input sigma
-            input_mu[:, t] = v_batch[:, 0] * mu + v_batch[:, 1]
-            input_sigma[:, t] = v_batch[:, 0] * sigma
             
             if t == 0 or t == 10:
                 print("\nmu ", mu.shape)
                 print("\nsigma ", sigma.shape)
+                print("\ninput_mu ", input_mu.shape)
+                print("\ninput_sigma ", input_sigma.shape)
+                print("\nv_batch[:, 0] * mu + v_batch[:, 1] ", (v_batch[:, 0] * mu + v_batch[:, 1]).shape)
+                print("\nv_batch[:, 0] * sigma ", (v_batch[:, 0] * sigma).shape)
+                print("\n", (v_batch[:, 0]).shape)
+                print((v_batch[:, 1]).shape)
                 print("\n_________________________")
+                
+            
+            #update input mu and input sigma
+            input_mu[:, t] = v_batch[:, 0] * mu[:, 0] + v_batch[:, 1] #collapsed mu
+            input_sigma[:, t] = v_batch[:, 0] * sigma[:, 0] #collapsed sigma
     
 ########################################################################
     
@@ -201,7 +207,7 @@ class Net(nn.Module):
                 for t in range(self.params.predict_steps):
                     # Call the model to get mean, standard deviation, and updated hidden and cell states
                     mu_de, sigma_de, decoder_hidden, decoder_cell = self(x[self.params.predict_start + t].unsqueeze(0),
-                                                                         id_batch, decoder_hidden, decoder_cell)
+                                                                         id_batch, decoder_hidden, decoder_cell, 0, calc_loss=False)
                     
                     # Create a normal distribution with mean and standard deviation
                     gaussian = torch.distributions.normal.Normal(mu_de, sigma_de)
@@ -238,8 +244,8 @@ class Net(nn.Module):
             # Iterate over prediction steps
             for t in range(self.params.predict_steps):
                 # Call the model to get mean, standard deviation, and updated hidden and cell states
-                mu_de, sigma_de, decoder_hidden, decoder_cell = self(x[self.params.predict_start + t].unsqueeze(0),
-                                                                     id_batch, decoder_hidden, decoder_cell)
+                mu_de, sigma_de, decoder_hidden, decoder_cell, _ = self(x[self.params.predict_start + t].unsqueeze(0),
+                                                                     id_batch, decoder_hidden, decoder_cell, 0, calc_loss=False)
                 
                 # Scale the mean and standard deviation and store them in the corresponding tensors
                 sample_mu[:, t] = mu_de * v_batch[:, 0] + v_batch[:, 1]

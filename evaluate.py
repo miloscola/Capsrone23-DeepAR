@@ -74,6 +74,8 @@ def evaluate(model, loss_fn, test_loader, params, plot_num, sample=True):
                 if t > 0 and torch.sum(zero_index) > 0:
                     test_batch[t, zero_index, 0] = mu[zero_index]"""
 
+            print("\ntest batch shape ", test_batch.shape)
+
             # Model inference for the current time step
             #mu, sigma, hidden, cell = model(test_batch.unsqueeze(0), id_batch, hidden, cell)
 

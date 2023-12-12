@@ -586,3 +586,510 @@ Net(
 [21:48:43] DeepAR.Train: Starting training for 20 epoch(s)
 [21:48:43] DeepAR.Train: begin training and evaluation
 [21:48:43] DeepAR.Train: Epoch 1/20
+[22:13:05] DeepAR.Train: Loading the datasets...
+[22:13:06] DeepAR.Data: train_len: 389101
+[22:13:06] DeepAR.Data: building datasets from data\elect...
+[22:13:06] DeepAR.Data: test_len: 2590
+[22:13:06] DeepAR.Data: building datasets from data\elect...
+[22:13:06] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[22:13:06] DeepAR.Data: num samples: 389101
+[22:13:06] DeepAR.Train: Loading complete.
+[22:13:06] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[22:13:06] DeepAR.Train: Starting training for 20 epoch(s)
+[22:13:06] DeepAR.Train: begin training and evaluation
+[22:13:06] DeepAR.Train: Epoch 1/20
+[22:15:32] DeepAR.Train: Loading the datasets...
+[22:15:33] DeepAR.Data: train_len: 389101
+[22:15:33] DeepAR.Data: building datasets from data\elect...
+[22:15:33] DeepAR.Data: test_len: 2590
+[22:15:33] DeepAR.Data: building datasets from data\elect...
+[22:15:33] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[22:15:33] DeepAR.Data: num samples: 389101
+[22:15:33] DeepAR.Train: Loading complete.
+[22:15:33] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[22:15:34] DeepAR.Train: Starting training for 20 epoch(s)
+[22:15:34] DeepAR.Train: begin training and evaluation
+[22:15:34] DeepAR.Train: Epoch 1/20
+[22:32:19] DeepAR.Train: Loading the datasets...
+[22:32:20] DeepAR.Data: train_len: 389101
+[22:32:20] DeepAR.Data: building datasets from data\elect...
+[22:32:20] DeepAR.Data: test_len: 2590
+[22:32:20] DeepAR.Data: building datasets from data\elect...
+[22:32:20] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[22:32:20] DeepAR.Data: num samples: 389101
+[22:32:20] DeepAR.Train: Loading complete.
+[22:32:20] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[22:32:20] DeepAR.Train: Starting training for 20 epoch(s)
+[22:32:20] DeepAR.Train: begin training and evaluation
+[22:32:20] DeepAR.Train: Epoch 1/20
+[22:35:05] DeepAR.Train: Loading the datasets...
+[22:35:06] DeepAR.Data: train_len: 389101
+[22:35:06] DeepAR.Data: building datasets from data\elect...
+[22:35:06] DeepAR.Data: test_len: 2590
+[22:35:06] DeepAR.Data: building datasets from data\elect...
+[22:35:06] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[22:35:06] DeepAR.Data: num samples: 389101
+[22:35:06] DeepAR.Train: Loading complete.
+[22:35:06] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[22:35:06] DeepAR.Train: Starting training for 20 epoch(s)
+[22:35:06] DeepAR.Train: begin training and evaluation
+[22:35:06] DeepAR.Train: Epoch 1/20
+[22:00:35] DeepAR.Train: Loading the datasets...
+[22:00:41] DeepAR.Data: train_len: 389101
+[22:00:41] DeepAR.Data: building datasets from data\elect...
+[22:00:41] DeepAR.Data: test_len: 2590
+[22:00:41] DeepAR.Data: building datasets from data\elect...
+[22:00:41] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[22:00:41] DeepAR.Data: num samples: 389101
+[22:00:41] DeepAR.Train: Loading complete.
+[22:00:41] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[22:00:42] DeepAR.Train: Starting training for 20 epoch(s)
+[22:00:42] DeepAR.Train: begin training and evaluation
+[22:00:42] DeepAR.Train: Epoch 1/20
+[22:41:30] DeepAR.Train: Loading the datasets...
+[22:41:34] DeepAR.Data: train_len: 389101
+[22:41:34] DeepAR.Data: building datasets from data\elect...
+[22:41:34] DeepAR.Data: test_len: 2590
+[22:41:34] DeepAR.Data: building datasets from data\elect...
+[22:41:34] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[22:41:34] DeepAR.Data: num samples: 389101
+[22:41:34] DeepAR.Train: Loading complete.
+[22:41:34] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[22:41:36] DeepAR.Train: Starting training for 20 epoch(s)
+[22:41:36] DeepAR.Train: begin training and evaluation
+[22:41:36] DeepAR.Train: Epoch 1/20
+[22:42:53] DeepAR.Train: Loading the datasets...
+[22:42:54] DeepAR.Data: train_len: 389101
+[22:42:54] DeepAR.Data: building datasets from data\elect...
+[22:42:54] DeepAR.Data: test_len: 2590
+[22:42:54] DeepAR.Data: building datasets from data\elect...
+[22:42:54] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[22:42:54] DeepAR.Data: num samples: 389101
+[22:42:54] DeepAR.Train: Loading complete.
+[22:42:54] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[22:42:54] DeepAR.Train: Starting training for 20 epoch(s)
+[22:42:54] DeepAR.Train: begin training and evaluation
+[22:42:54] DeepAR.Train: Epoch 1/20
+[22:44:28] DeepAR.Train: Loading the datasets...
+[22:44:29] DeepAR.Data: train_len: 389101
+[22:44:29] DeepAR.Data: building datasets from data\elect...
+[22:44:29] DeepAR.Data: test_len: 2590
+[22:44:29] DeepAR.Data: building datasets from data\elect...
+[22:44:29] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[22:44:29] DeepAR.Data: num samples: 389101
+[22:44:29] DeepAR.Train: Loading complete.
+[22:44:29] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[22:44:29] DeepAR.Train: Starting training for 20 epoch(s)
+[22:44:29] DeepAR.Train: begin training and evaluation
+[22:44:29] DeepAR.Train: Epoch 1/20
+[22:46:06] DeepAR.Train: Loading the datasets...
+[22:46:07] DeepAR.Data: train_len: 389101
+[22:46:07] DeepAR.Data: building datasets from data\elect...
+[22:46:07] DeepAR.Data: test_len: 2590
+[22:46:07] DeepAR.Data: building datasets from data\elect...
+[22:46:07] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[22:46:07] DeepAR.Data: num samples: 389101
+[22:46:07] DeepAR.Train: Loading complete.
+[22:46:07] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[22:46:07] DeepAR.Train: Starting training for 20 epoch(s)
+[22:46:07] DeepAR.Train: begin training and evaluation
+[22:46:07] DeepAR.Train: Epoch 1/20
+[22:47:19] DeepAR.Train: Loading the datasets...
+[22:47:20] DeepAR.Data: train_len: 389101
+[22:47:20] DeepAR.Data: building datasets from data\elect...
+[22:47:20] DeepAR.Data: test_len: 2590
+[22:47:20] DeepAR.Data: building datasets from data\elect...
+[22:47:20] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[22:47:20] DeepAR.Data: num samples: 389101
+[22:47:20] DeepAR.Train: Loading complete.
+[22:47:20] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[22:47:21] DeepAR.Train: Starting training for 20 epoch(s)
+[22:47:21] DeepAR.Train: begin training and evaluation
+[22:47:21] DeepAR.Train: Epoch 1/20
+[22:48:23] DeepAR.Train: Loading the datasets...
+[22:48:24] DeepAR.Data: train_len: 389101
+[22:48:24] DeepAR.Data: building datasets from data\elect...
+[22:48:24] DeepAR.Data: test_len: 2590
+[22:48:24] DeepAR.Data: building datasets from data\elect...
+[22:48:24] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[22:48:24] DeepAR.Data: num samples: 389101
+[22:48:24] DeepAR.Train: Loading complete.
+[22:48:24] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[22:48:24] DeepAR.Train: Starting training for 20 epoch(s)
+[22:48:24] DeepAR.Train: begin training and evaluation
+[22:48:24] DeepAR.Train: Epoch 1/20
+[22:59:48] DeepAR.Train: Loading the datasets...
+[22:59:49] DeepAR.Data: train_len: 389101
+[22:59:49] DeepAR.Data: building datasets from data\elect...
+[22:59:49] DeepAR.Data: test_len: 2590
+[22:59:49] DeepAR.Data: building datasets from data\elect...
+[22:59:49] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[22:59:49] DeepAR.Data: num samples: 389101
+[22:59:49] DeepAR.Train: Loading complete.
+[22:59:49] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[22:59:49] DeepAR.Train: Starting training for 20 epoch(s)
+[22:59:49] DeepAR.Train: begin training and evaluation
+[22:59:49] DeepAR.Train: Epoch 1/20
+[23:10:25] DeepAR.Train: Loading the datasets...
+[23:10:26] DeepAR.Data: train_len: 389101
+[23:10:26] DeepAR.Data: building datasets from data\elect...
+[23:10:26] DeepAR.Data: test_len: 2590
+[23:10:26] DeepAR.Data: building datasets from data\elect...
+[23:10:26] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[23:10:26] DeepAR.Data: num samples: 389101
+[23:10:26] DeepAR.Train: Loading complete.
+[23:10:26] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[23:10:26] DeepAR.Train: Starting training for 20 epoch(s)
+[23:10:26] DeepAR.Train: begin training and evaluation
+[23:10:26] DeepAR.Train: Epoch 1/20
+[23:15:17] DeepAR.Train: Loading the datasets...
+[23:15:18] DeepAR.Data: train_len: 389101
+[23:15:18] DeepAR.Data: building datasets from data\elect...
+[23:15:18] DeepAR.Data: test_len: 2590
+[23:15:18] DeepAR.Data: building datasets from data\elect...
+[23:15:18] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[23:15:18] DeepAR.Data: num samples: 389101
+[23:15:18] DeepAR.Train: Loading complete.
+[23:15:18] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[23:15:18] DeepAR.Train: Starting training for 20 epoch(s)
+[23:15:18] DeepAR.Train: begin training and evaluation
+[23:15:18] DeepAR.Train: Epoch 1/20
+[23:18:28] DeepAR.Train: Loading the datasets...
+[23:18:29] DeepAR.Data: train_len: 389101
+[23:18:29] DeepAR.Data: building datasets from data\elect...
+[23:18:29] DeepAR.Data: test_len: 2590
+[23:18:29] DeepAR.Data: building datasets from data\elect...
+[23:18:29] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[23:18:29] DeepAR.Data: num samples: 389101
+[23:18:29] DeepAR.Train: Loading complete.
+[23:18:29] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[23:18:29] DeepAR.Train: Starting training for 20 epoch(s)
+[23:18:29] DeepAR.Train: begin training and evaluation
+[23:18:29] DeepAR.Train: Epoch 1/20
+[23:21:03] DeepAR.Train: Loading the datasets...
+[23:21:03] DeepAR.Data: train_len: 389101
+[23:21:03] DeepAR.Data: building datasets from data\elect...
+[23:21:03] DeepAR.Data: test_len: 2590
+[23:21:03] DeepAR.Data: building datasets from data\elect...
+[23:21:03] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[23:21:03] DeepAR.Data: num samples: 389101
+[23:21:03] DeepAR.Train: Loading complete.
+[23:21:03] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[23:21:04] DeepAR.Train: Starting training for 20 epoch(s)
+[23:21:04] DeepAR.Train: begin training and evaluation
+[23:21:04] DeepAR.Train: Epoch 1/20
+[23:22:13] DeepAR.Train: Loading the datasets...
+[23:22:14] DeepAR.Data: train_len: 389101
+[23:22:14] DeepAR.Data: building datasets from data\elect...
+[23:22:14] DeepAR.Data: test_len: 2590
+[23:22:14] DeepAR.Data: building datasets from data\elect...
+[23:22:14] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[23:22:14] DeepAR.Data: num samples: 389101
+[23:22:14] DeepAR.Train: Loading complete.
+[23:22:14] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[23:22:14] DeepAR.Train: Starting training for 20 epoch(s)
+[23:22:14] DeepAR.Train: begin training and evaluation
+[23:22:14] DeepAR.Train: Epoch 1/20
+[23:31:50] DeepAR.Train: Loading the datasets...
+[23:31:50] DeepAR.Data: train_len: 389101
+[23:31:50] DeepAR.Data: building datasets from data\elect...
+[23:31:50] DeepAR.Data: test_len: 2590
+[23:31:50] DeepAR.Data: building datasets from data\elect...
+[23:31:50] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[23:31:50] DeepAR.Data: num samples: 389101
+[23:31:50] DeepAR.Train: Loading complete.
+[23:31:50] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[23:31:51] DeepAR.Train: Starting training for 20 epoch(s)
+[23:31:51] DeepAR.Train: begin training and evaluation
+[23:31:51] DeepAR.Train: Epoch 1/20
+[23:33:58] DeepAR.Train: Loading the datasets...
+[23:33:59] DeepAR.Data: train_len: 389101
+[23:33:59] DeepAR.Data: building datasets from data\elect...
+[23:33:59] DeepAR.Data: test_len: 2590
+[23:33:59] DeepAR.Data: building datasets from data\elect...
+[23:33:59] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[23:33:59] DeepAR.Data: num samples: 389101
+[23:33:59] DeepAR.Train: Loading complete.
+[23:33:59] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[23:33:59] DeepAR.Train: Starting training for 20 epoch(s)
+[23:33:59] DeepAR.Train: begin training and evaluation
+[23:33:59] DeepAR.Train: Epoch 1/20
+[23:35:17] DeepAR.Train: Loading the datasets...
+[23:35:18] DeepAR.Data: train_len: 389101
+[23:35:18] DeepAR.Data: building datasets from data\elect...
+[23:35:18] DeepAR.Data: test_len: 2590
+[23:35:18] DeepAR.Data: building datasets from data\elect...
+[23:35:18] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[23:35:18] DeepAR.Data: num samples: 389101
+[23:35:18] DeepAR.Train: Loading complete.
+[23:35:18] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[23:35:18] DeepAR.Train: Starting training for 20 epoch(s)
+[23:35:18] DeepAR.Train: begin training and evaluation
+[23:35:18] DeepAR.Train: Epoch 1/20
+[23:36:11] DeepAR.Train: Loading the datasets...
+[23:36:12] DeepAR.Data: train_len: 389101
+[23:36:12] DeepAR.Data: building datasets from data\elect...
+[23:36:12] DeepAR.Data: test_len: 2590
+[23:36:12] DeepAR.Data: building datasets from data\elect...
+[23:36:12] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[23:36:12] DeepAR.Data: num samples: 389101
+[23:36:12] DeepAR.Train: Loading complete.
+[23:36:12] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[23:36:12] DeepAR.Train: Starting training for 20 epoch(s)
+[23:36:12] DeepAR.Train: begin training and evaluation
+[23:36:12] DeepAR.Train: Epoch 1/20
+[14:04:23] DeepAR.Train: Loading the datasets...
+[14:04:26] DeepAR.Data: train_len: 389101
+[14:04:26] DeepAR.Data: building datasets from data\elect...
+[14:04:26] DeepAR.Data: test_len: 2590
+[14:04:26] DeepAR.Data: building datasets from data\elect...
+[14:04:26] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[14:04:26] DeepAR.Data: num samples: 389101
+[14:04:26] DeepAR.Train: Loading complete.
+[14:04:26] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[14:04:27] DeepAR.Train: Starting training for 20 epoch(s)
+[14:04:27] DeepAR.Train: begin training and evaluation
+[14:04:27] DeepAR.Train: Epoch 1/20
+[14:10:47] DeepAR.Train: Loading the datasets...
+[14:10:48] DeepAR.Data: train_len: 389101
+[14:10:48] DeepAR.Data: building datasets from data\elect...
+[14:10:48] DeepAR.Data: test_len: 2590
+[14:10:48] DeepAR.Data: building datasets from data\elect...
+[14:10:48] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[14:10:48] DeepAR.Data: num samples: 389101
+[14:10:48] DeepAR.Train: Loading complete.
+[14:10:48] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[14:10:48] DeepAR.Train: Starting training for 20 epoch(s)
+[14:10:48] DeepAR.Train: begin training and evaluation
+[14:10:48] DeepAR.Train: Epoch 1/20
+[14:14:49] DeepAR.Train: Loading the datasets...
+[14:14:50] DeepAR.Data: train_len: 389101
+[14:14:50] DeepAR.Data: building datasets from data\elect...
+[14:14:50] DeepAR.Data: test_len: 2590
+[14:14:50] DeepAR.Data: building datasets from data\elect...
+[14:14:50] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[14:14:50] DeepAR.Data: num samples: 389101
+[14:14:50] DeepAR.Train: Loading complete.
+[14:14:50] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[14:14:50] DeepAR.Train: Starting training for 20 epoch(s)
+[14:14:50] DeepAR.Train: begin training and evaluation
+[14:14:50] DeepAR.Train: Epoch 1/20
+[14:15:18] DeepAR.Eval: - Full test metrics: ND: 0.692; RMSE: 5.204; test_loss: 7.951
+[14:15:18] DeepAR.Train: train_loss: 1.5298536618550618
+[14:15:18] DeepAR.Train: train_loss: 1.5298536618550618
