@@ -73,7 +73,7 @@ class Net(nn.Module):
         for t in range(min(self.params.train_window, train_batch.shape[0])):
             
             #if t == 0 or t == 10:
-            #    #print("\nlabels batch ", labels_batch.shape)
+            #    print("\nlabels batch ", labels_batch.shape)
             #    print("\ntrain_batch ", train_batch.shape)
             #    print("\nLSTM input ", train_batch[t, :, :].unsqueeze(0).shape)
             #    print("\ntrain window ", self.params.train_window)
@@ -85,8 +85,8 @@ class Net(nn.Module):
                 # Replace missing values with the output mu from the last time step
                 train_batch[t, zero_index, 0] = mu[zero_index][:, 0]
             
-            if t == 0 or t == 10:
-                print("\nonehot_embed ", onehot_embed.shape)
+           # if t == 0 or t == 10:
+           #     print("\nonehot_embed ", onehot_embed.shape)
                 
             
             #Concatenate x (z_{t-1} + x_t) with the one-hot embedding
@@ -148,8 +148,8 @@ class Net(nn.Module):
                 # Replace missing values with the output mu from the last time step
                 x[t, zero_index, 0] = mu[zero_index][:, 0]
             
-            if t == 0 or t == 10:
-                print("\nonehot_embed ", onehot_embed.shape)
+            #if t == 0 or t == 10:
+            #    print("\nonehot_embed ", onehot_embed.shape)
                 
             
             #Concatenate x (z_{t-1} + x_t) with the one-hot embedding
@@ -251,8 +251,8 @@ class Net(nn.Module):
                     # Replace missing values with the output mu from the last time step
                     x[t, zero_index, 0] = mu[zero_index][:, 0]
                 
-                if t == 0 or t == 10:
-                    print("\nonehot_embed ", onehot_embed.shape)
+                #if t == 0 or t == 10:
+                #    print("\nonehot_embed ", onehot_embed.shape)
                     
                 
                 #Concatenate x (z_{t-1} + x_t) with the one-hot embedding

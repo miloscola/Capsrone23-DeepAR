@@ -1180,3 +1180,51 @@ Net(
 [15:09:49] DeepAR.Train: Starting training for 20 epoch(s)
 [15:09:49] DeepAR.Train: begin training and evaluation
 [15:09:49] DeepAR.Train: Epoch 1/20
+[15:14:04] DeepAR.Train: Loading the datasets...
+[15:14:05] DeepAR.Data: train_len: 389101
+[15:14:05] DeepAR.Data: building datasets from data\elect...
+[15:14:05] DeepAR.Data: test_len: 2590
+[15:14:05] DeepAR.Data: building datasets from data\elect...
+[15:14:05] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[15:14:05] DeepAR.Data: num samples: 389101
+[15:14:05] DeepAR.Train: Loading complete.
+[15:14:05] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[15:14:06] DeepAR.Train: Starting training for 20 epoch(s)
+[15:14:06] DeepAR.Train: begin training and evaluation
+[15:14:06] DeepAR.Train: Epoch 1/20
+[15:14:34] DeepAR.Eval: - Full test metrics: ND: 0.849; RMSE: 6.637; test_loss: 7.797
+[15:14:34] DeepAR.Train: train_loss: 1.5822707811991374
+[15:14:34] DeepAR.Train: train_loss: 1.5822707811991374
+[15:17:51] DeepAR.Train: Loading the datasets...
+[15:17:51] DeepAR.Data: train_len: 389101
+[15:17:51] DeepAR.Data: building datasets from data\elect...
+[15:17:51] DeepAR.Data: test_len: 2590
+[15:17:51] DeepAR.Data: building datasets from data\elect...
+[15:17:51] DeepAR.Data: weights: tensor([4.5579e-08, 4.7663e-08, 4.8446e-08,  ..., 8.4827e-05, 8.4776e-05,
+        8.4272e-05], dtype=torch.float64)
+[15:17:51] DeepAR.Data: num samples: 389101
+[15:17:51] DeepAR.Train: Loading complete.
+[15:17:51] DeepAR.Train: Model: 
+Net(
+  (embedding): Embedding(370, 20)
+  (lstm): LSTM(25, 40, num_layers=3, dropout=0.1)
+  (relu): ReLU()
+  (distribution_mu): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_presigma): Linear(in_features=120, out_features=1, bias=True)
+  (distribution_sigma): Softplus(beta=1, threshold=20)
+)
+[15:17:52] DeepAR.Train: Starting training for 20 epoch(s)
+[15:17:52] DeepAR.Train: begin training and evaluation
+[15:17:52] DeepAR.Train: Epoch 1/20
+[15:18:21] DeepAR.Eval: - Full test metrics: ND: 0.639; RMSE: 4.924; test_loss: 7.543
+[15:18:21] DeepAR.Train: train_loss: 1.4002641042073567
+[15:18:21] DeepAR.Train: train_loss: 1.4002641042073567
