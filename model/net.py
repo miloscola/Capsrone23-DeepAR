@@ -117,7 +117,9 @@ class Net(nn.Module):
             for j in range(self.params.sample_times):
                 decoder_hidden = hidden
                 decoder_cell = cell
-                
+                print('predict_start:', self.params.predict_start)
+                print('predict_steps:', self.params.predict_steps)
+                print('id_batch:', id_batch)
                 loss, _, mu_de, sigma_de = self(x[self.params.predict_start:self.params.predict_start+self.params.predict_steps],
                                         id_batch, self.params)
 
@@ -135,6 +137,9 @@ class Net(nn.Module):
         else:
             decoder_hidden = hidden
             decoder_cell = cell
+            print('predict_start:', self.params.predict_start)
+            print('predict_steps:', self.params.predict_steps)
+            print('params:', self.params.train_window)
             sample_mu = torch.zeros(batch_size, self.params.predict_steps, device=self.params.device)
             sample_sigma = torch.zeros(batch_size, self.params.predict_steps, device=self.params.device)
             loss, _, mu_de, sigma_de = self(x[self.params.predict_start:self.params.predict_start+self.params.predict_steps],
