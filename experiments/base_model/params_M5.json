@@ -7,7 +7,7 @@
     "test_window": 56,
     "predict_start": 29,
     "test_predict_start": 29,
-    "predict_steps": 28,
+    "predict_steps": 27,
     "num_class": 30490,
     "cov_dim": 6,
     "lstm_hidden_dim": 40,

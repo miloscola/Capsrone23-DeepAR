@@ -107,6 +107,7 @@ class Net(nn.Module):
                 sample_mu[:, t] = mu_de * v_batch[:, 0] + v_batch[:, 1]
                 sample_sigma[:, t] = sigma_de * v_batch[:, 0]
                 if t < (self.params.predict_steps - 1):
+                    #print(x.shape) #BUG HAPPENS ON NEXT LINE #fixed
                     x[self.params.predict_start + t + 1, :, 0] = mu_de
             return sample_mu, sample_sigma
 

@@ -17,6 +17,7 @@ from dataloader import *
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import multiprocessing as mp
 
 logger = logging.getLogger('DeepAR.Train')
 
@@ -162,7 +163,11 @@ def train_and_evaluate(model: nn.Module,
         utils.plot_all_epoch(loss_summary, print_params + '_loss', location=params.plot_dir)
 
 
+#changed predict steps from 28 to 27
+
 if __name__ == '__main__':
+    #fix multi processing issue
+    mp.set_start_method('spawn', True)
 
     # Load the parameters from json file
     args = parser.parse_args()
@@ -203,10 +208,10 @@ if __name__ == '__main__':
     train_set = TrainDataset(data_dir, args.dataset, params.num_class)
     test_set = TestDataset(data_dir, args.dataset, params.num_class)
     sampler = WeightedSampler(data_dir, args.dataset) # Use weighted sampler instead of random sampler
-    train_loader = DataLoader(train_set, batch_size=params.batch_size, sampler=sampler, num_workers=4)
+    train_loader = DataLoader(train_set, batch_size=params.batch_size, sampler=sampler, num_workers=0) #set num workers to from 4 to 0 to fix multi processing issues
     print(len(test_set))
     print(len(train_set))
-    test_loader = DataLoader(test_set, batch_size=params.predict_batch, sampler=RandomSampler(test_set), num_workers=4)
+    test_loader = DataLoader(test_set, batch_size=params.predict_batch, sampler=RandomSampler(test_set), num_workers=0) #set num workers to from 4 to 0 to fix multi processing issues
     logger.info('Loading complete.')
 
     logger.info(f'Model: \n{str(model)}')
