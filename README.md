@@ -57,3 +57,6 @@ Currently, the reimplementation of the DeepAR paper(DeepAR: Probabilistic Foreca
 
 ![Sample results on electricity. The top 10 plots are sampled from the test set with the highest 10% ND values, whereas the bottom 10 plots are sampled from the rest of the test set.](./experiments/base_model/figures/best_ND.png)
 
+##changes
+* intagrated iTransformer into deepAR (work in progress)
+
