@@ -2,7 +2,9 @@
 Currently, the reimplementation of the DeepAR paper(DeepAR: Probabilistic Forecasting with Autoregressive Recurrent Networks https://arxiv.org/abs/1704.04110) is available in PyTorch. More papers will be coming soon.
 
 ## Authors:
-* **Yunkai Zhang**(<yunkai_zhang@ucsb.edu>) - *University of California, Santa Barbara* 
+* **Yunkai Zhang**(<yunkai_zhang@ucsb.edu>) - *University of California, Santa Barbara*
+
+* **Milo Scola**(miloscola@berkeley.edu) - University of California Berkeley
 
 * **Qiao Jiang** - *Brown University*
 
@@ -57,3 +59,5 @@ Currently, the reimplementation of the DeepAR paper(DeepAR: Probabilistic Foreca
 
 ![Sample results on electricity. The top 10 plots are sampled from the test set with the highest 10% ND values, whereas the bottom 10 plots are sampled from the rest of the test set.](./experiments/base_model/figures/best_ND.png)
 
+## Changes
+* Experiments with using transformers on the M5 dataset (work in progress)
