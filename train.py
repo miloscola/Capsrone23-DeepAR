@@ -70,19 +70,6 @@ def train(model: nn.Module,
         loss = torch.zeros(1, device=params.device)
         hidden = model.init_hidden(batch_size)
         cell = model.init_cell(batch_size)
-
-        """#iterate over timesteps in training window
-        for t in range(params.train_window):
-            # if z_t is missing, replace it by output mu from the last time step
-            zero_index = (train_batch[t, :, 0] == 0)
-            
-            if t > 0 and torch.sum(zero_index) > 0:
-                # Replace missing values with the output mu from the last time step
-                train_batch[t, zero_index, 0] = mu[zero_index]
-            # Perform model inference for the current time step
-            mu, sigma, hidden, cell = model(train_batch[t].unsqueeze_(0).clone(), idx, hidden, cell)
-            # Compute the loss for the curent batch
-            loss += loss_fn(mu, sigma, labels_batch[t])""" #how do we handle loss?
             
         #print("\nbatch shape BEFORE model", train_batch.shape)    
             
@@ -195,48 +182,40 @@ if __name__ == '__main__':
     params = utils.Params(json_path)
 
     params.relative_metrics = args.relative_metrics
-    params.sampling =  args.sampling
+    params.sampling = args.sampling
     params.model_dir = model_dir
     params.plot_dir = os.path.join(model_dir, 'figures')
 
     # create missing directories
-    try:
-        os.mkdir(params.plot_dir)
-    except FileExistsError:
-        pass
+    os.makedirs(params.plot_dir, exist_ok=True)
 
-    # use GPU if available
-    cuda_exist = torch.cuda.is_available()
-    # Set random seeds for reproducible experiments if necessary
-    if cuda_exist:
-        params.device = torch.device('cuda')
-        # torch.cuda.manual_seed(240)
-        logger.info('Using Cuda...')
-        model = net.Net(params).cuda()
-    else:
-        params.device = torch.device('cpu')
-        # torch.manual_seed(230)
-        logger.info('Not using cuda...')
-        model = net.Net(params)
+    # Use GPU if available
+    params.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    logger.info(f'Using device: {params.device}')
+
+    # Initialize model
+    model = net.Net(params).to(params.device)
 
     utils.set_logger(os.path.join(model_dir, 'train.log'))
     logger.info('Loading the datasets...')
 
     train_set = TrainDataset(data_dir, args.dataset, params.num_class)
     test_set = TestDataset(data_dir, args.dataset, params.num_class)
-    sampler = WeightedSampler(data_dir, args.dataset) # Use weighted sampler instead of random sampler
+    sampler = WeightedSampler(data_dir, args.dataset)  # Use weighted sampler instead of random sampler
     train_loader = DataLoader(train_set, batch_size=params.batch_size, sampler=sampler, num_workers=4)
     test_loader = DataLoader(test_set, batch_size=params.predict_batch, sampler=RandomSampler(test_set), num_workers=4)
     logger.info('Loading complete.')
 
     logger.info(f'Model: \n{str(model)}')
+
+    # Initialize optimizer
     optimizer = optim.Adam(model.parameters(), lr=params.learning_rate)
 
-    # fetch loss function
+    # Fetch loss function
     loss_fn = net.loss_fn
 
     # Train the model
-    logger.info('Starting training for {} epoch(s)'.format(params.num_epochs))
+    logger.info(f'Starting training for {params.num_epochs} epoch(s)')
     train_and_evaluate(model,
                        train_loader,
                        test_loader,

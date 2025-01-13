@@ -29,7 +29,8 @@ def prep_data(data, covariates, data_start, train = True):
     input_size = window_size-stride_size
     windows_per_series = np.full((num_series), (time_len-input_size) // stride_size)
     #print("windows pre: ", windows_per_series.shape)
-    if train: windows_per_series -= (data_start+stride_size-1) // stride_size
+    if train: 
+        windows_per_series -= (data_start+stride_size-1) // stride_size
     #print("data_start: ", data_start.shape)
     #print(data_start)
     #print("windows: ", windows_per_series.shape)
@@ -62,6 +63,45 @@ def prep_data(data, covariates, data_start, train = True):
             print("data: ", data.shape)
             print("d: ", data[window_start:window_end-1, series].shape)
             '''
+            
+            
+            ## window wise normalization##
+            
+            # Extract data and covariates for this window
+            x_window = data[window_start:window_end, series]
+            cov_window = covariates[window_start:window_end, :]
+
+            # Handle cases where the window might be all zeros
+            nonzero_values = x_window[x_window != 0]
+
+            if len(nonzero_values) > 0:  # Window contains meaningful data
+                window_mean = np.mean(nonzero_values)
+                window_std = np.std(nonzero_values) + 1e-8  # Small epsilon to avoid division by zero
+            else:  # Window is all zeros
+                window_mean = 0
+                window_std = 1  # Avoid division errors; effectively no normalization
+            
+            # Normalize the window using its statistics
+            x_window = (x_window - window_mean) / window_std
+            label[count, :] = (data[window_start:window_end, series] - window_mean) / window_std
+            
+            # Save mean and std for the window
+            v_input[count, 0] = window_mean
+            v_input[count, 1] = window_std
+            
+            # Save mean and std for the window
+            v_input[count, 0] = window_mean
+            v_input[count, 1] = window_std
+
+            # Store normalized data and covariates
+            x_input[count, :, 0] = x_window
+            x_input[count, :, 1:1 + num_covariates] = cov_window
+            x_input[count, :, -1] = series
+            
+            count += 1
+            
+            
+            '''
             x_input[count, 1:, 0] = data[window_start:window_end-1, series]
             x_input[count, :, 1:1+num_covariates] = covariates[window_start:window_end, :]
             x_input[count, :, -1] = series
@@ -75,6 +115,8 @@ def prep_data(data, covariates, data_start, train = True):
                 if train:
                     label[count, :] = label[count, :]/v_input[count, 0]
             count += 1
+            '''
+            
     prefix = os.path.join(save_path, 'train_' if train else 'test_')
     np.save(prefix+'data_'+save_name, x_input)
     np.save(prefix+'v_'+save_name, v_input)
