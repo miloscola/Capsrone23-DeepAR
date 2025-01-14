@@ -5,11 +5,12 @@ Currently, the reimplementation of the DeepAR paper(DeepAR: Probabilistic Foreca
 ## Authors:
 * **Yunkai Zhang**(<yunkai_zhang@ucsb.edu>) - *University of California, Santa Barbara*
 
+* **Chiang-Wei Fang** - *University of California Berkeley*
+
 * **Qiao Jiang** - *Brown University*
 
 * **Xueying Ma** - *Columbia University*
  
-* **Chiang-Wei Fang** - *University of California Berkeley*
 * Acknowledgement: Professor Xifeng Yan's group at UC Santa Barbara. Part of the work was done at WeWork.
 
 
