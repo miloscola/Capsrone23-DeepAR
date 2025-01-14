@@ -6,10 +6,6 @@ Currently, the reimplementation of the DeepAR paper(DeepAR: Probabilistic Foreca
 
 * **Milo Scola**(<miloscola@berkeley.edu>) - *University of California Berkeley*
 
-* **Qiao Jiang** - *Brown University*
-
-* **Xueying Ma** - *Columbia University*
- 
 * **Chiang-Wei Fang** - *University of California Berkeley*
 
 * **Tsai-Hsuan** - *University of California Berkeley*
@@ -17,6 +13,11 @@ Currently, the reimplementation of the DeepAR paper(DeepAR: Probabilistic Foreca
 * **Yolanda He** - *University of California Berkeley*
 
 * **Advay Sharma** - *University of California Berkeley*
+
+* **Qiao Jiang** - *Brown University*
+
+* **Xueying Ma** - *Columbia University*
+
 * Acknowledgement: Professor Xifeng Yan's group at UC Santa Barbara. Part of the work was done at WeWork.
 
 ## To run:
